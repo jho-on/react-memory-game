@@ -31,6 +31,22 @@ body{
     margin: 0;
 }
 
+.loadingScreen{
+    @extend %flexCenteredItems;
+    background-color: var(--backgroundColor);
+    width: 100dvw;
+    height: 100dvh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9;
+    
+    h1{
+        color: var(--textColor);
+        animation: infinite 2s loadingRotate ease-out;
+    }
+}
+
 .cardGrid{
     display: grid;
     gap: .5em;
@@ -43,7 +59,7 @@ body{
 
 .cardHeader{
     @extend %flexCenteredItems;
-
+    justify-content: space-around;
     border: 5px solid var(--textColor);
     border-radius: 25px 25px 0px 0px;
     border-bottom: 0px;
@@ -54,37 +70,69 @@ body{
         margin: 0;
         color: var(--detailColor);
     }
+
+    p{
+        color: var(--detailColor);
+        font-size: 20px;
+    }
+
+    button{
+        border: 1px solid var(--backgroundColor);
+        background-color: #ff0044;
+        color: var(--textColor);
+        width: 80px;
+        height: 40px;
+        font-weight: 600;
+        font-size: 15px;
+
+        transition-property: transform, filter;
+        transition-duration: .3s;
+
+        &:hover{
+            transform: scale(1.1);
+            filter: brightness(120%);
+            transition-property: transform, filter;
+            transition-duration: .2s;
+        }
+    }
 }   
 
 .card{
+    
     @extend %cardSize;
     background-color: var(--textColor);
+    transform: scale(1);
+    transition-property: transform;
+    transition-duration: .3s;
     
+    &:hover{
+        transform: scale(0.9);
+        transition-property: transform;
+        transition-duration: .2s;
+    }
+
     img{
         @extend %cardSize;
+
         opacity: 0;
     }
 
+
     &.active{
+        transform: scale(.85);
+
         img{
             opacity: 1;
         }
-
     }
-}
 
-.loadingScreen{
-    @extend %flexCenteredItems;
-    background-color: var(--backgroundColor);
-    width: 100dvw;
-    height: 100dvh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    
-    h1{
-        color: var(--textColor);
-        animation: infinite 2s loadingRotate ease-out;
+    &.match{
+        transform: scale(.9);
+        background-color: green;
+
+        img{
+            transform: scale(.95);
+        }
     }
 }
 

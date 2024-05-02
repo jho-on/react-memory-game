@@ -50,21 +50,31 @@ function CardGrid(){
     const [cards, setCards] = useState([]);
     const [prevCard, setPreCard] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const [score, setScore] = useState(0);
 
-    const prevIndex = useRef();
+    const prevIndex = useRef(undefined);
+
 
     useEffect(() => {
         setCards(generateCards(icons));
     }, [])
 
+
     function testMatch(targetIndex){
-        if(cards[targetIndex].id === cards[prevCard].id){
+        if(cards[targetIndex].id == cards[prevCard].id){
             cards[targetIndex].status = 'active match';
             cards[prevCard].status = 'active match';
             setPreCard(undefined);
+            setCards([...cards]);
+            setScore(prevScore => prevScore + 2);
+            
         }else{
             cards[targetIndex].status = 'active';
             setCards([...cards]);
+            
+            if(score > 0){
+                setScore(prevScore => prevScore - 1);
+            }
 
             setTimeout(() => {
                 cards[targetIndex].status = '';
@@ -73,11 +83,12 @@ function CardGrid(){
                 setPreCard(undefined);
             }, 500);
         }
+        
     }
 
 
     function handleCardClick(index){
-        if(prevIndex.current === index || cards[index].status === 'active match'){
+        if(prevIndex.current === index || cards[index].status == 'active match'){
             return
         }
         if(prevCard === undefined){
@@ -94,7 +105,13 @@ function CardGrid(){
     return(
         <>
             {isLoading === true? <div className='loadingScreen'><h1>Loading</h1></div> : null}
-            <div className='cardHeader'><h1>Memory Game</h1></div>
+
+            <div className='cardHeader'>
+                <button onClick={() => location.reload()}>Reset</button>
+                <h1>Memory Game</h1>
+                <p>Score: {score}</p>
+            </div>
+
             <div className="cardGrid">
                 {cards.map((card, index) => {
                     setTimeout(() => {setIsLoading(false)}, 2000);
